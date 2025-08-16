@@ -55,37 +55,22 @@
 
             config = mkIf cfg.enable {
               environment = {
-                profiles = [ "${linyaps}/etc/profile.d" ];
-                sessionVariables.LINGLONG_ROOT = "/var/lib/linglong";
+                profiles = [ "/var/lib/linglong/entries" ];
                 systemPackages = [
                   linyaps
                   linyaps-box
                 ];
-
-                # 添加/etc配置文件
-                etc = {
-                  "profile.d/linglong.sh" = {
-                    source = "${linyaps}/etc/profile.d/linglong.sh";
-                    mode = "0644";
-                  };
-                  "X11/Xsession.d/21linglong" = {
-                    source = "${linyaps}/etc/X11/Xsession.d/21linglong";
-                    mode = "0644";
-                  };
-                  "tmpfiles.d/linglong.conf" = {
-                    source = "${linyaps}/lib/tmpfiles.d/linglong.conf";
-                    mode = "0644";
-                  };
-                };
               };
+
+              security.polkit.enable = true;
+
+              fonts.fontDir.enable = true;
 
               services.dbus.packages = [ linyaps ];
 
               systemd = {
                 packages = [ linyaps ];
-                tmpfiles.rules = [
-                  "d /var/log/linglong 0757 root root - -"
-                ];
+                tmpfiles.packages = [ linyaps ];
               };
 
               users = {

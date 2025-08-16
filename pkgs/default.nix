@@ -93,6 +93,12 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.wrapQtAppsNoGuiHook
   ];
 
+  postInstall = ''
+    # move to the right location for systemd.packages option
+    # https://github.com/NixOS/nixpkgs/blob/85dbfc7aaf52ecb755f87e577ddbe6dbbdbc1054/nixos/modules/system/boot/systemd.nix#L605
+    mv $out/lib/systemd/system-environment-generators $out/lib/systemd/system-generators
+  '';
+
   # Disable automatic Qt wrapping to handle it manually
   dontWrapQtApps = true;
 
